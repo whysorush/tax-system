@@ -1,6 +1,20 @@
 Follow these steps:
 
 ```sh
+
+Project Structure:
+
+src/
+   ├── server.ts           # Main server entry point
+   ├── services/           # Business logic
+   │   ├── spvService.ts
+   │   ├── investorService.ts
+   │   └── taxFormService.ts
+   ├── db/
+   │   └── prisma/
+   │       └── client.ts   # Prisma client configuration
+   └── types/              # TypeScript type definitions
+
 # Step 1: Clone the repository using the project's Git URL.
 git clone https://github.com/whysorush/tax-system.git
 
