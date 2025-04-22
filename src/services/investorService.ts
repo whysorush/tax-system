@@ -1,16 +1,17 @@
+import { ApiResponse, InvestorData } from '../types/api';
+import prisma from '../db/prisma/client';
 
-import prisma from './db/prisma/client';
-
-export const investorService = {
-  getInvestorsBySPV: async (spvId: string) => {
+const investorService = {
+  getInvestorsBySPV: async (spvId: string): Promise<ApiResponse<InvestorData[]>> => {
     try {
-      return await prisma.investor.findMany({
+      const investors = await prisma.investor.findMany({
         where: { spvId },
         orderBy: { name: 'asc' }
       });
+      return { data: investors, status: 'success' };
     } catch (error) {
       console.error('Error fetching investors:', error);
-      throw error;
+      return { error: 'Failed to fetch investors', status: 'error' };
     }
   },
 
@@ -59,3 +60,5 @@ export const investorService = {
     }
   }
 };
+
+export default investorService;

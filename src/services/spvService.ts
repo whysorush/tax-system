@@ -1,15 +1,20 @@
+import { ApiResponse, SPVData } from '../types/api';
+import prisma from '../db/prisma/client';
 
-import prisma from './db/prisma/client';
+interface SPV {
+  id: string;
+  name: string;
+  // ... other fields
+}
 
-export const spvService = {
-  getAllSPVs: async () => {
+const spvService = {
+  getAllSPVs: async (): Promise<{ data: SPV[]; status: string }> => {
     try {
-      return await prisma.sPV.findMany({
-        orderBy: { createdAt: 'desc' }
-      });
+      const spvs = await prisma.spv.findMany();
+      return { data: spvs, status: 'success' };
     } catch (error) {
       console.error('Error fetching SPVs:', error);
-      throw error;
+      return { data: [], status: 'error' };
     }
   },
 
@@ -58,3 +63,5 @@ export const spvService = {
     }
   }
 };
+
+export default spvService;

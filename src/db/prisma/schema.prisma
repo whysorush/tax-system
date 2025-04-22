@@ -1,0 +1,51 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SPV {
+  id            String     @id @default(uuid())
+  name          String
+  entityTaxId   String     @map("entity_tax_id")
+  taxYear       Int        @map("tax_year")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+  investors     Investor[]
+  taxForms      TaxForm[]
+
+  @@map("spvs")
+}
+
+model Investor {
+  id        String    @id @default(uuid())
+  name      String
+  email     String
+  taxId     String    @map("tax_id")
+  spvId     String?   @map("spv_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  spv       SPV?      @relation(fields: [spvId], references: [id])
+  taxForms  TaxForm[]
+
+  @@map("investors")
+}
+
+model TaxForm {
+  id          String    @id @default(uuid())
+  formType    String    @map("form_type")
+  status      String    @default("pending")
+  downloadUrl String?   @map("download_url")
+  spvId       String?   @map("spv_id")
+  investorId  String?   @map("investor_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  spv         SPV?      @relation(fields: [spvId], references: [id])
+  investor    Investor? @relation(fields: [investorId], references: [id])
+
+  @@map("tax_forms")
+}
