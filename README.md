@@ -11,8 +11,12 @@ cd tax-system
 npm i
 
 # Step 4: Start the development server with auto-reloading and an instant preview.
+Frontend
 npm run dev
 
+
+Backend: 
+npm run dev:server
 
 1. SPV Endpoints:
 
